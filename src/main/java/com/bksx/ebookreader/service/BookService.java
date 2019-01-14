@@ -43,7 +43,7 @@ public class BookService {
      * @param uid
      * @return
      */
-    public List<UserBookListBean> listBook(String uid){
-        return bookMapper.queryBookByUid(uid);
+    public List<UserBookListBean> listBook(String uid,String bname){
+        return bookMapper.queryBookByUid(uid,bname);
     }
 }

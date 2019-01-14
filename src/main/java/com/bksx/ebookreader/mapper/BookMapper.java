@@ -30,7 +30,7 @@ public interface BookMapper {
      * @param uid
      * @return
      */
-    @Select("SELECT book.bid as bid, user_book.uid as uid, user_book.chapter as chapter,user_book.page as page, user_book.date as date,book.bname as bname, book.author as author,book.publishdate as publishdate,book.coverimg as coverimg,book.bookurl as bookurl FROM book left JOIN user_book on book.bid = user_book.bid WHERE user_book.uid is null or user_book.uid= #{uid} ORDER BY user_book.date desc,book.date DESC")
+    @Select("SELECT book.bid as bid, user_book.uid as uid, user_book.chapter as chapter,user_book.page as page, user_book.date as date,book.bname as bname, book.author as author,book.publishdate as publishdate,book.coverimg as coverimg,book.bookurl as bookurl FROM book left JOIN user_book on book.bid = user_book.bid WHERE user_book.uid is null or user_book.uid = #{uid} and book.bname like '%' || 'bname' || '%'  ORDER BY user_book.date desc,book.date DESC")
     @Results({
             @Result(property = "bid", column = "bid"),
             @Result(property = "uid", column = "uid"),
@@ -43,5 +43,5 @@ public interface BookMapper {
             @Result(property = "coverimg", column = "coverimg"),
             @Result(property = "bookurl", column = "bookurl")
     })
-    List<UserBookListBean> queryBookByUid(String uid);
+    List<UserBookListBean> queryBookByUid(@Param("uid") String uid,@Param("bname") String bname);
 }

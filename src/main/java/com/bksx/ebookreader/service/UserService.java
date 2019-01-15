@@ -29,7 +29,7 @@ public class UserService {
 
         User u =  userMapper.findUserByNamePassword(name,password);
         if(StringUtils.isNoneEmpty(u.getHeadimgurl())){
-            u.setHeadimgurl(uploadFolder + u.getHeadimgurl());
+            u.setHeadimgurl(uploadFolder + "headimg/" + u.getHeadimgurl());
         }
         return u;
     }

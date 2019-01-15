@@ -57,11 +57,11 @@ public class BookService {
                 String coverimg = userBookListBean.getCoverimg();
 
                 if(StringUtils.isNotEmpty(bookurl)){
-                    userBookListBean.setBookurl(uploadFolder + bookurl);
+                    userBookListBean.setBookurl(uploadFolder + "bookfile/" + bookurl);
                 }
                 // coverimg
                 if(StringUtils.isNotEmpty(coverimg)){
-                    userBookListBean.setBookurl(uploadFolder + coverimg);
+                    userBookListBean.setBookurl(uploadFolder + "coverimg/" + coverimg);
                 }
             }
         }

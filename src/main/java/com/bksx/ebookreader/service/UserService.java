@@ -2,7 +2,9 @@ package com.bksx.ebookreader.service;
 
 import com.bksx.ebookreader.bean.User;
 import com.bksx.ebookreader.mapper.UserMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -14,6 +16,9 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Value("${file.uploadFolder}")
+    private String uploadFolder;
+
     /**
      * 根据用户名和密码登录
      * @param name 用户名
@@ -21,7 +26,12 @@ public class UserService {
      * @return
      */
     public User login(String name,String password){
-        return userMapper.findUserByNamePassword(name,password);
+
+        User u =  userMapper.findUserByNamePassword(name,password);
+        if(StringUtils.isNoneEmpty(u.getHeadimgurl())){
+            u.setHeadimgurl(uploadFolder + u.getHeadimgurl());
+        }
+        return u;
     }
 
     /**

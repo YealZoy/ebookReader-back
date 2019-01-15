@@ -11,12 +11,15 @@ import com.bksx.ebookreader.util.FileUtil;
 import com.bksx.ebookreader.util.Result;
 import com.bksx.ebookreader.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/")
 public class EbookReaderController {
@@ -26,7 +29,15 @@ public class EbookReaderController {
     @Autowired
     private BookService bookService;
 
+    @Value("${file.uploadFolder}")
+    private String uploadFolder;
+
     private UserBookService userBookService;
+
+    @GetMapping("/")
+    public String welcome(){
+        return "Hello world";
+    }
 
     /**
      * 通过用户名和密码登陆
@@ -81,7 +92,7 @@ public class EbookReaderController {
      * @param userBook
      * @return
      */
-    @PostMapping("addrecord")
+    @PostMapping("/addrecord")
     public Result addRecord(@RequestBody UserBook userBook){
         int i = userBookService.addUserBook(userBook);
         if(i <= 0){
@@ -97,28 +108,66 @@ public class EbookReaderController {
      * @param bname
      * @return
      */
-    @GetMapping("listbook")
+    @GetMapping("/listbook")
     public Result listBook(String uid,String bname){
         List<UserBookListBean> listBeans = bookService.listBook(uid,bname);
         return Result.success(listBeans);
     }
 
-    //处理文件上传
-    @RequestMapping(value="/testuploadimg", method = RequestMethod.POST)
-    public @ResponseBody String uploadImg(@RequestParam("file") MultipartFile file,
+    //处理头像上传
+    @PostMapping("/headimg")
+    public Result headimg(@RequestParam("file") MultipartFile file,
                                           HttpServletRequest request) {
         String contentType = file.getContentType();
-        String fileName = file.getOriginalFilename();
-        /*System.out.println("fileName-->" + fileName);
-        System.out.println("getContentType-->" + contentType);*/
-        String filePath = request.getSession().getServletContext().getRealPath("imgupload/");
+        //String fileName = file.getOriginalFilename();
+        String fileName = UUID.randomUUID().toString().replaceAll("-","");
+        String filePath = uploadFolder + "/headimg/";
+        System.out.print(filePath);
         try {
             FileUtil.uploadFile(file.getBytes(), filePath, fileName);
         } catch (Exception e) {
-            // TODO: handle exception
+            // 上传文件失败
+            return Result.failure(ResultCode.INTERFACE_OUTTER_INVOKE_ERROR);
         }
         //返回json
-        return "uploadimg success";
+        return Result.success(fileName);
+    }
+
+    // 处理书籍封面上传
+    @PostMapping("/coverimg")
+    public Result coverimg(@RequestParam("file") MultipartFile file,
+                           HttpServletRequest request){
+        String contentType = file.getContentType();
+        //String fileName = file.getOriginalFilename();
+        String fileName = UUID.randomUUID().toString().replaceAll("-","");
+        String filePath = uploadFolder + "/coverimg/";
+        System.out.print(filePath);
+        try {
+            FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+        } catch (Exception e) {
+            // 上传文件失败
+            return Result.failure(ResultCode.INTERFACE_OUTTER_INVOKE_ERROR);
+        }
+        //返回json
+        return Result.success(fileName);
+
+    }
+
+    @PostMapping("/bookfile")
+    public Result bookfile(@RequestParam("file") MultipartFile file,
+                           HttpServletRequest request){
+        String contentType = file.getContentType();
+        //String fileName = file.getOriginalFilename();
+        String fileName = UUID.randomUUID().toString().replaceAll("-","");
+        String filePath = uploadFolder + "/bookfile/";
+        System.out.print(filePath);
+        try {
+            FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+        } catch (Exception e) {
+            // 上传文件失败
+            return Result.failure(ResultCode.INTERFACE_OUTTER_INVOKE_ERROR);
+        }
+        return Result.success(fileName);
     }
 
 }

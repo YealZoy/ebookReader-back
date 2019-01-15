@@ -10,6 +10,6 @@ public class PageController {
     @RequestMapping(value="/gouploadimg", method = RequestMethod.GET)
     public String goUploadImg() {
         //跳转到 templates 目录下的 uploadimg.html
-        return "/uploadimg";
+        return "uploadimg";
     }
 }

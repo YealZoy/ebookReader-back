@@ -3,7 +3,9 @@ package com.bksx.ebookreader.service;
 import com.bksx.ebookreader.bean.Book;
 import com.bksx.ebookreader.bean.UserBookListBean;
 import com.bksx.ebookreader.mapper.BookMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -16,6 +18,9 @@ public class BookService {
 
     @Autowired
     private BookMapper bookMapper;
+
+    @Value("${file.uploadFolder}")
+    private String uploadFolder;
 
     /**
      * 添加书
@@ -44,6 +49,22 @@ public class BookService {
      * @return
      */
     public List<UserBookListBean> listBook(String uid,String bname){
-        return bookMapper.queryBookByUid(uid,bname);
+        List<UserBookListBean> listBeans = bookMapper.queryBookByUid(uid,bname);
+        if(listBeans != null && listBeans.size() > 0){
+            for(UserBookListBean userBookListBean:listBeans){
+                // bookurl
+                String bookurl = userBookListBean.getBookurl();
+                String coverimg = userBookListBean.getCoverimg();
+
+                if(StringUtils.isNotEmpty(bookurl)){
+                    userBookListBean.setBookurl(uploadFolder + bookurl);
+                }
+                // coverimg
+                if(StringUtils.isNotEmpty(coverimg)){
+                    userBookListBean.setBookurl(uploadFolder + coverimg);
+                }
+            }
+        }
+        return listBeans;
     }
 }

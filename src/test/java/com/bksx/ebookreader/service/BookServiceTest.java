@@ -28,7 +28,7 @@ public class BookServiceTest {
 
     @Test
     public void listBook() {
-        List<UserBookListBean> listBeans = bookService.listBook("d78c16bf52234d35afd58bd40b185ab7");
+        List<UserBookListBean> listBeans = bookService.listBook("d78c16bf52234d35afd58bd40b185ab7","ztt");
         System.out.print(listBeans);
     }
 

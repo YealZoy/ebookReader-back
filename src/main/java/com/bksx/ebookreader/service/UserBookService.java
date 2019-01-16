@@ -39,6 +39,12 @@ public class UserBookService {
         }
 
         userBook.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        return userBookMapper.adduserBook(userBook);
+
+        if(userBookMapper.findByUidBid(userBook.getUid(),userBook.getBid()) <= 0){
+            return userBookMapper.adduserBook(userBook);
+        }else {
+            return userBookMapper.updateRecord(userBook);
+        }
+
     }
 }

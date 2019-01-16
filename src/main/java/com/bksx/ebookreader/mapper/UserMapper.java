@@ -33,6 +33,14 @@ public interface UserMapper {
     @Select("select count(*) as count from user where uname = #{uname}")
     int finaByname(String uname);
 
+    /**
+     * 根据uid 查询有没有
+     * @param uid
+     * @return
+     */
     @Select("select count(*) as count from user where uid = #{uid}")
     int findByUid(String uid);
+
+    @Select("select * from user where openid = #{openid}")
+    User findByOpenId(String openid);
 }

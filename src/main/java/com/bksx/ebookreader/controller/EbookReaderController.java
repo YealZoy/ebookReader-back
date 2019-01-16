@@ -7,6 +7,7 @@ import com.bksx.ebookreader.service.UserBookService;
 import com.bksx.ebookreader.service.UserService;
 import com.bksx.ebookreader.service.WechartService;
 import com.bksx.ebookreader.util.*;
+import org.apache.ibatis.annotations.Mapper;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
@@ -35,6 +38,9 @@ public class EbookReaderController {
 
     @Autowired
     private WechartService wechartService;
+
+    @Autowired
+    private JWTToken jwtToken;
 
     @Value("${file.uploadFolder}")
     private String uploadFolder;
@@ -105,10 +111,15 @@ public class EbookReaderController {
         log.info("微信用户信息为:{}",winfo);
 
         User u = wechartService.wechatLogin(winfo);
+        u.setPassword("");
+        Map map = new HashMap();
+        map.put("user",u);
+        map.put("token",jwtToken.createJWT());
+
         if(u == null){
             Result.failure(ResultCode.DATA_IS_WRONG);
         }
-        return Result.success(u);
+        return Result.success(map);
     }
 
 
@@ -118,13 +129,16 @@ public class EbookReaderController {
      * @return
      */
     @PostMapping("/login")
-    public Result login(@RequestBody User user){
+    public Result login(@RequestBody User user)throws Exception{
         String uname = user.getUname();
         String password = user.getPassword();
         User u = userService.login(uname,password);
         if(u != null){
             u.setPassword("");
-            return Result.success(u);
+            Map map = new HashMap();
+            map.put("user",u);
+            map.put("token",jwtToken.createJWT());
+            return Result.success(map);
         }else{
             return Result.failure(ResultCode.DATA_IS_WRONG,"用户名和密码匹配失败");
         }

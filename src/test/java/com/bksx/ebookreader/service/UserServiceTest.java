@@ -27,7 +27,7 @@ public class UserServiceTest {
     @Test
     public void registerUser() {
         User user = new User();
-        user.setUname("zff");
+        user.setUname("tttt");
         user.setPassword("0");
         int i = userService.registerUser(user);
         System.out.print(i);
@@ -46,4 +46,6 @@ public class UserServiceTest {
         oauthUrl =  oauthUrl.replace("APPID","wx578d3b84be4aa096").replace("REDIRECT_URI",redirect_uri).replace("SCOPE","snsapi_userinfo");
         System.out.print(oauthUrl);
     }
+
+
 }

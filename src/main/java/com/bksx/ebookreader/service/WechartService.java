@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
+
 @Service
 public class WechartService {
 
@@ -57,11 +59,11 @@ public class WechartService {
      */
     public User wechatLogin(String jsonobj){
         JSONObject jsonObject =  new JSONObject(jsonobj);
-        String openid = (String)jsonObject.get("open");
+        String openid = (String)jsonObject.get("openid");
         int i = wechartMapper.getOpenid(openid);
         if(i <= 0){
             String nickname = (String)jsonObject.get("nickname");
-            String sex = (String) jsonObject.get("sex");
+            int sex = (int) jsonObject.get("sex");
             String province = (String)jsonObject.get("province");
             String city = (String)jsonObject.get("city");
             String country = (String)jsonObject.get("country");
@@ -69,7 +71,7 @@ public class WechartService {
             Wechart wechart = new Wechart();
             wechart.setOpenid(openid);
             wechart.setNickname(nickname);
-            wechart.setSex(sex);
+            wechart.setSex(sex + "");
             wechart.setProvince(province);
             wechart.setCity(city);
             wechart.setCountry(country);
@@ -78,6 +80,7 @@ public class WechartService {
             wechartMapper.addWechart(wechart);
 
             User user = new User();
+            user.setUid(UUID.randomUUID().toString().replaceAll("-",""));
             user.setHeadimgurl(headimgurl);
             user.setOpenid(openid);
             user.setUname(nickname);

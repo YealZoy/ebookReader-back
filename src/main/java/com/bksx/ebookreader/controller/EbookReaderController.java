@@ -206,8 +206,8 @@ public class EbookReaderController {
     public Result headimg(@RequestParam("file") MultipartFile file,
                                           HttpServletRequest request) {
         String contentType = file.getContentType();
-        //String fileName = file.getOriginalFilename();
-        String fileName = UUID.randomUUID().toString().replaceAll("-","");
+        String originalFilename = file.getOriginalFilename();
+        String fileName = UUID.randomUUID().toString().replaceAll("-","") + "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
         String filePath = uploadFolder + "/headimg/";
         System.out.print(filePath);
         try {
@@ -225,8 +225,8 @@ public class EbookReaderController {
     public Result coverimg(@RequestParam("file") MultipartFile file,
                            HttpServletRequest request){
         String contentType = file.getContentType();
-        //String fileName = file.getOriginalFilename();
-        String fileName = UUID.randomUUID().toString().replaceAll("-","");
+        String originalFilename = file.getOriginalFilename();
+        String fileName = UUID.randomUUID().toString().replaceAll("-","") + "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
         String filePath = uploadFolder + "/coverimg/";
         System.out.print(filePath);
         try {
@@ -244,8 +244,8 @@ public class EbookReaderController {
     public Result bookfile(@RequestParam("file") MultipartFile file,
                            HttpServletRequest request){
         String contentType = file.getContentType();
-        //String fileName = file.getOriginalFilename();
-        String fileName = UUID.randomUUID().toString().replaceAll("-","");
+        String originalFilename = file.getOriginalFilename();
+        String fileName = UUID.randomUUID().toString().replaceAll("-","") + "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
         String filePath = uploadFolder + "/bookfile/";
         System.out.print(filePath);
         try {
